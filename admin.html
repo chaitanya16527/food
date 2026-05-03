@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="checkout-page">
+
+<div class="checkout-box">
+  <h1>⚙ Admin Panel</h1>
+
+  <h3>Add Product</h3>
+
+  <input type="text" id="pname" placeholder="Product Name">
+  <input type="number" id="pprice" placeholder="Price">
+  <input type="text" id="pimage" placeholder="Image URL">
+
+  <button onclick="addProduct()">Add Product</button>
+
+  <h3 style="margin-top:20px;">All Products</h3>
+
+  <div id="product-list"></div>
+
+  <a href="index.html">Back to Home</a>
+</div>
+
+<script>
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function loadProducts() {
+  let container = document.getElementById("product-list");
+
+  if (products.length === 0) {
+    container.innerHTML = "<p>No products added</p>";
+    return;
+  }
+
+  container.innerHTML = "";
+
+  products.forEach((p, index) => {
+    let div = document.createElement("div");
+
+    div.style.borderBottom = "1px solid #ccc";
+    div.style.padding = "10px";
+
+    div.innerHTML = `
+      <p><b>${p.name}</b> - ₹${p.price}</p>
+      <button onclick="deleteProduct(${index})" style="background:red;color:white;">
+        Delete
+      </button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+function addProduct() {
+  let name = document.getElementById("pname").value;
+  let price = document.getElementById("pprice").value;
+  let image = document.getElementById("pimage").value;
+
+  if (name === "" || price === "") {
+    alert("Fill all fields");
+    return;
+  }
+
+  products.push({
+    name: name,
+    price: Number(price),
+    image: image || "https://via.placeholder.com/100"
+  });
+
+  localStorage.setItem("products", JSON.stringify(products));
+
+  alert("Product added!");
+
+  document.getElementById("pname").value = "";
+  document.getElementById("pprice").value = "";
+  document.getElementById("pimage").value = "";
+
+  loadProducts();
+}
+
+function deleteProduct(index) {
+  products.splice(index, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadProducts();
+}
+
+loadProducts();
+
+</script>
+
+</body>
+</html>
