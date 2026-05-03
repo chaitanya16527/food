@@ -47,23 +47,33 @@ function addToCart(name, price) {
 
   const item = cart.find(product => product.name === name);
 
-  if (item) item.qty++;
-  else cart.push({ name, price, qty: 1 });
+  if (item) {
+    item.qty++;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
 
   saveCart();
 }
 
 function increaseQty(name) {
   const item = cart.find(product => product.name === name);
-  if (item) item.qty++;
+
+  if (item) {
+    item.qty++;
+  }
+
   saveCart();
 }
 
 function decreaseQty(name) {
   const item = cart.find(product => product.name === name);
 
-  if (item && item.qty > 1) item.qty--;
-  else cart = cart.filter(product => product.name !== name);
+  if (item && item.qty > 1) {
+    item.qty--;
+  } else {
+    cart = cart.filter(product => product.name !== name);
+  }
 
   saveCart();
 }
@@ -83,6 +93,7 @@ function renderCart() {
     subtotal += item.price * item.qty;
 
     const li = document.createElement("li");
+
     li.innerHTML = `
       <span>${item.name} - ₹${item.price} x ${item.qty}</span>
       <div class="cart-actions">
@@ -91,6 +102,7 @@ function renderCart() {
         <button class="remove" onclick="removeItem('${item.name}')">Remove</button>
       </div>
     `;
+
     cartList.appendChild(li);
   });
 
@@ -112,7 +124,12 @@ function searchProduct() {
 
   products.forEach(product => {
     const name = product.querySelector("h3").innerText.toLowerCase();
-    product.style.display = name.includes(query) ? "block" : "none";
+
+    if (name.includes(query)) {
+      product.style.display = "block";
+    } else {
+      product.style.display = "none";
+    }
   });
 }
 
