@@ -8,72 +8,72 @@
 </head>
 <body class="checkout-page">
 
-  <div class="checkout-box">
-    <h1>🛒 Checkout</h1>
+<div class="checkout-box">
+  <h1>🛒 Checkout</h1>
 
-    <h2>Order Summary</h2>
-    <ul id="checkout-list"></ul>
+  <h2>Order Summary</h2>
+  <ul id="checkout-list"></ul>
 
-    <h3>Total: ₹<span id="checkout-total">0</span></h3>
+  <h3>Total: ₹<span id="checkout-total">0</span></h3>
 
-    <h2>Customer Details</h2>
+  <h2>Customer Details</h2>
+  <input type="text" id="customerName" placeholder="Full Name">
+  <input type="text" id="customerPhone" placeholder="Phone Number">
+  <textarea id="customerAddress" placeholder="Delivery Address"></textarea>
 
-    <input type="text" id="customerName" placeholder="Full Name">
-    <input type="text" id="customerPhone" placeholder="Phone Number">
-    <textarea id="customerAddress" placeholder="Delivery Address"></textarea>
+  <button onclick="placeOrder()">Place Order</button>
+  <a href="index.html">Back to Home</a>
+</div>
 
-    <button onclick="placeOrder()">Place Order</button>
-    <a href="index.html">Back to Home</a>
-  </div>
+<script>
+let checkoutCart = JSON.parse(localStorage.getItem("cart")) || [];
+let checkoutDiscount = Number(localStorage.getItem("discountAmount")) || 0;
 
-  <script>
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let discountAmount = Number(localStorage.getItem("discountAmount")) || 0;
+function loadCheckout() {
+  const list = document.getElementById("checkout-list");
+  let subtotal = 0;
+  list.innerHTML = "";
 
-    function loadCheckout() {
-      const list = document.getElementById("checkout-list");
-      let subtotal = 0;
+  checkoutCart.forEach(item => {
+    subtotal += item.price * item.qty;
+    const li = document.createElement("li");
+    li.innerText = item.name + " - ₹" + item.price + " x " + item.qty;
+    list.appendChild(li);
+  });
 
-      list.innerHTML = "";
+  document.getElementById("checkout-total").innerText = subtotal - checkoutDiscount;
+}
 
-      cart.forEach(item => {
-        subtotal += item.price * item.qty;
+function placeOrder() {
+  const name = document.getElementById("customerName").value.trim();
+  const phone = document.getElementById("customerPhone").value.trim();
+  const address = document.getElementById("customerAddress").value.trim();
 
-        let li = document.createElement("li");
-        li.innerText = item.name + " - ₹" + item.price + " x " + item.qty;
-        list.appendChild(li);
-      });
+  if (checkoutCart.length === 0) {
+    alert("Your cart is empty!");
+    window.location.href = "index.html";
+    return;
+  }
 
-      let finalTotal = subtotal - discountAmount;
-      document.getElementById("checkout-total").innerText = finalTotal;
-    }
+  if (name === "" || phone === "" || address === "") {
+    alert("Please fill all details");
+    return;
+  }
 
-    function placeOrder() {
-      const name = document.getElementById("customerName").value;
-      const phone = document.getElementById("customerPhone").value;
-      const address = document.getElementById("customerAddress").value;
+  const orderId = "ORD" + Math.floor(Math.random() * 1000000);
 
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        window.location.href = "index.html";
-        return;
-      }
+  localStorage.setItem("lastOrderId", orderId);
+  localStorage.setItem("lastOrderName", name);
+  localStorage.setItem("lastOrderTotal", document.getElementById("checkout-total").innerText);
 
-      if (name === "" || phone === "" || address === "") {
-        alert("Please fill all details");
-        return;
-      }
+  localStorage.removeItem("cart");
+  localStorage.removeItem("discountAmount");
 
-      alert("Order placed successfully! Thank you, " + name);
+  window.location.href = "success.html";
+}
 
-      localStorage.removeItem("cart");
-      localStorage.removeItem("discountAmount");
-
-      window.location.href = "index.html";
-    }
-
-    loadCheckout();
-  </script>
+loadCheckout();
+</script>
 
 </body>
 </html>
