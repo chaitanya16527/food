@@ -1,10 +1,13 @@
+// Load data from localStorage
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let discountAmount = Number(localStorage.getItem("discountAmount")) || 0;
 
+// Get logged user
 function getUser() {
   return localStorage.getItem("user");
 }
 
+// ================= AUTH UI =================
 function updateAuthUI() {
   const user = getUser();
   const logo = document.getElementById("logo");
@@ -14,18 +17,17 @@ function updateAuthUI() {
   if (user) {
     logo.innerText = "🛒 MyShop Pro (" + user + ")";
     authBtn.innerText = "Logout";
-    warning.style.display = "none";
+    if (warning) warning.style.display = "none";
   } else {
     logo.innerText = "🛒 MyShop Pro";
     authBtn.innerText = "Login";
-    warning.style.display = "block";
+    if (warning) warning.style.display = "block";
   }
 }
 
+// Login / Logout button
 function handleAuth() {
-  const user = getUser();
-
-  if (user) {
+  if (getUser()) {
     localStorage.removeItem("user");
     alert("Logged out successfully!");
     updateAuthUI();
@@ -34,12 +36,14 @@ function handleAuth() {
   }
 }
 
+// ================= CART =================
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   localStorage.setItem("discountAmount", discountAmount);
   renderCart();
 }
 
+// Add item
 function addToCart(name, price) {
   if (!getUser()) {
     alert("Please login first!");
@@ -47,71 +51,68 @@ function addToCart(name, price) {
     return;
   }
 
-  const item = cart.find(product => product.name === name);
+  let item = cart.find(p => p.name === name);
 
-  if (item) {
-    item.qty++;
-  } else {
-    cart.push({ name, price, qty: 1 });
-  }
+  if (item) item.qty++;
+  else cart.push({ name, price, qty: 1 });
 
   saveCart();
 }
 
+// Increase quantity
 function increaseQty(name) {
-  const item = cart.find(product => product.name === name);
+  let item = cart.find(p => p.name === name);
   if (item) item.qty++;
   saveCart();
 }
 
+// Decrease quantity
 function decreaseQty(name) {
-  const item = cart.find(product => product.name === name);
+  let item = cart.find(p => p.name === name);
 
   if (item && item.qty > 1) {
     item.qty--;
   } else {
-    cart = cart.filter(product => product.name !== name);
+    cart = cart.filter(p => p.name !== name);
   }
 
   saveCart();
 }
 
+// Remove item
 function removeItem(name) {
-  cart = cart.filter(product => product.name !== name);
+  cart = cart.filter(p => p.name !== name);
   saveCart();
 }
 
+// ================= RENDER CART =================
 function renderCart() {
-  const cartList = document.getElementById("cart-list");
-  cartList.innerHTML = "";
+  let list = document.getElementById("cart-list");
 
+  if (!list) return;
+
+  list.innerHTML = "";
   let subtotal = 0;
 
   cart.forEach(item => {
     subtotal += item.price * item.qty;
 
-    const li = document.createElement("li");
+    let li = document.createElement("li");
     li.innerHTML = `
       <span>${item.name} - ₹${item.price} x ${item.qty}</span>
       <div class="cart-actions">
         <button class="plus" onclick="increaseQty('${item.name}')">+</button>
         <button class="minus" onclick="decreaseQty('${item.name}')">-</button>
-        <button class="remove" onclick="removeItem('${item.name}')">Remove</button>
+        <button class="remove" onclick="removeItem('${item.name}')">X</button>
       </div>
     `;
 
-    cartList.appendChild(li);
+    list.appendChild(li);
   });
 
-  if (subtotal === 0) {
-    discountAmount = 0;
-  }
+  if (subtotal === 0) discountAmount = 0;
 
-  if (discountAmount > subtotal) {
-    discountAmount = 0;
-  }
-
-  const finalTotal = subtotal - discountAmount;
+  let finalTotal = subtotal - discountAmount;
 
   document.getElementById("subtotal").innerText = subtotal;
   document.getElementById("discount").innerText = discountAmount;
@@ -119,47 +120,43 @@ function renderCart() {
   document.getElementById("nav-total").innerText = finalTotal;
 }
 
+// ================= SEARCH =================
 function searchProduct() {
-  const query = document.getElementById("searchInput").value.toLowerCase();
-  const products = document.querySelectorAll(".product");
+  let query = document.getElementById("searchInput").value.toLowerCase();
+  let products = document.querySelectorAll(".product");
 
-  products.forEach(product => {
-    const name = product.querySelector("h3").innerText.toLowerCase();
-    product.style.display = name.includes(query) ? "block" : "none";
+  products.forEach(p => {
+    let name = p.querySelector("h3").innerText.toLowerCase();
+    p.style.display = name.includes(query) ? "block" : "none";
   });
 }
 
+// ================= COUPON =================
 function applyCoupon() {
   if (!getUser()) {
-    alert("Please login first!");
-    window.location.href = "login.html";
+    alert("Login first!");
     return;
   }
 
-  const subtotal = Number(document.getElementById("subtotal").innerText);
+  let subtotal = Number(document.getElementById("subtotal").innerText);
 
   if (subtotal === 0) {
     alert("Add items first!");
     return;
   }
 
-  const code = prompt("Enter coupon code: SAVE10");
+  let code = prompt("Enter coupon code: SAVE10");
 
   if (code === "SAVE10") {
     discountAmount = Math.floor(subtotal * 0.10);
     saveCart();
-    alert("Coupon applied: 10% discount");
+    alert("10% discount applied!");
   } else {
     alert("Invalid coupon");
   }
 }
 
-function clearCart() {
-  cart = [];
-  discountAmount = 0;
-  saveCart();
-}
-
+// ================= CHECKOUT =================
 function checkout() {
   if (!getUser()) {
     alert("Please login first!");
@@ -167,16 +164,22 @@ function checkout() {
     return;
   }
 
-  const total = document.getElementById("final-total").innerText;
-
   if (cart.length === 0) {
-    alert("Your cart is empty!");
+    alert("Cart is empty!");
     return;
   }
 
-  alert("Order placed successfully! Total: ₹" + total);
-  clearCart();
+  // Go to checkout page
+  window.location.href = "checkout.html";
 }
 
+// ================= CLEAR CART =================
+function clearCart() {
+  cart = [];
+  discountAmount = 0;
+  saveCart();
+}
+
+// ================= INIT =================
 updateAuthUI();
 renderCart();
