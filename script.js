@@ -1,85 +1,182 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let discount = 0;
+let discountAmount = Number(localStorage.getItem("discountAmount")) || 0;
+
+function getUser() {
+  return localStorage.getItem("user");
+}
+
+function updateAuthUI() {
+  const user = getUser();
+  const logo = document.getElementById("logo");
+  const authBtn = document.getElementById("authBtn");
+  const warning = document.getElementById("login-warning");
+
+  if (user) {
+    logo.innerText = "🛒 MyShop Pro (" + user + ")";
+    authBtn.innerText = "Logout";
+    warning.style.display = "none";
+  } else {
+    logo.innerText = "🛒 MyShop Pro";
+    authBtn.innerText = "Login";
+    warning.style.display = "block";
+  }
+}
+
+function handleAuth() {
+  const user = getUser();
+
+  if (user) {
+    localStorage.removeItem("user");
+    alert("Logged out successfully!");
+    updateAuthUI();
+  } else {
+    window.location.href = "login.html";
+  }
+}
 
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("discountAmount", discountAmount);
   renderCart();
 }
 
 function addToCart(name, price) {
-  let item = cart.find(p => p.name === name);
+  if (!getUser()) {
+    alert("Please login first!");
+    window.location.href = "login.html";
+    return;
+  }
 
-  if (item) item.qty++;
-  else cart.push({ name, price, qty: 1 });
+  const item = cart.find(product => product.name === name);
+
+  if (item) {
+    item.qty++;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
 
   saveCart();
 }
 
+function increaseQty(name) {
+  const item = cart.find(product => product.name === name);
+  if (item) item.qty++;
+  saveCart();
+}
+
+function decreaseQty(name) {
+  const item = cart.find(product => product.name === name);
+
+  if (item && item.qty > 1) {
+    item.qty--;
+  } else {
+    cart = cart.filter(product => product.name !== name);
+  }
+
+  saveCart();
+}
+
+function removeItem(name) {
+  cart = cart.filter(product => product.name !== name);
+  saveCart();
+}
+
 function renderCart() {
-  let list = document.getElementById("cart-list");
-  list.innerHTML = "";
+  const cartList = document.getElementById("cart-list");
+  cartList.innerHTML = "";
 
   let subtotal = 0;
 
   cart.forEach(item => {
     subtotal += item.price * item.qty;
 
-    let li = document.createElement("li");
-    li.innerHTML = `${item.name} ₹${item.price} x ${item.qty}
-      <button onclick="removeItem('${item.name}')">X</button>`;
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${item.name} - ₹${item.price} x ${item.qty}</span>
+      <div class="cart-actions">
+        <button class="plus" onclick="increaseQty('${item.name}')">+</button>
+        <button class="minus" onclick="decreaseQty('${item.name}')">-</button>
+        <button class="remove" onclick="removeItem('${item.name}')">Remove</button>
+      </div>
+    `;
 
-    list.appendChild(li);
+    cartList.appendChild(li);
   });
 
-  let final = subtotal - discount;
+  if (subtotal === 0) {
+    discountAmount = 0;
+  }
+
+  if (discountAmount > subtotal) {
+    discountAmount = 0;
+  }
+
+  const finalTotal = subtotal - discountAmount;
 
   document.getElementById("subtotal").innerText = subtotal;
-  document.getElementById("discount").innerText = discount;
-  document.getElementById("final-total").innerText = final;
-  document.getElementById("nav-total").innerText = final;
-}
-
-function removeItem(name) {
-  cart = cart.filter(i => i.name !== name);
-  saveCart();
-}
-
-function applyCoupon() {
-  let code = prompt("Enter code: SAVE10");
-
-  if (code === "SAVE10") {
-    let subtotal = Number(document.getElementById("subtotal").innerText);
-    discount = subtotal * 0.1;
-    renderCart();
-  }
+  document.getElementById("discount").innerText = discountAmount;
+  document.getElementById("final-total").innerText = finalTotal;
+  document.getElementById("nav-total").innerText = finalTotal;
 }
 
 function searchProduct() {
-  let query = document.getElementById("searchInput").value.toLowerCase();
-  let products = document.querySelectorAll(".product");
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  const products = document.querySelectorAll(".product");
 
-  products.forEach(p => {
-    let name = p.querySelector("h3").innerText.toLowerCase();
-    p.style.display = name.includes(query) ? "block" : "none";
+  products.forEach(product => {
+    const name = product.querySelector("h3").innerText.toLowerCase();
+    product.style.display = name.includes(query) ? "block" : "none";
   });
 }
 
-function checkout() {
-  if (cart.length === 0) return alert("Cart empty!");
-  alert("Order placed!");
-  cart = [];
-  discount = 0;
-  saveCart();
+function applyCoupon() {
+  if (!getUser()) {
+    alert("Please login first!");
+    window.location.href = "login.html";
+    return;
+  }
+
+  const subtotal = Number(document.getElementById("subtotal").innerText);
+
+  if (subtotal === 0) {
+    alert("Add items first!");
+    return;
+  }
+
+  const code = prompt("Enter coupon code: SAVE10");
+
+  if (code === "SAVE10") {
+    discountAmount = Math.floor(subtotal * 0.10);
+    saveCart();
+    alert("Coupon applied: 10% discount");
+  } else {
+    alert("Invalid coupon");
+  }
 }
 
 function clearCart() {
   cart = [];
-  discount = 0;
+  discountAmount = 0;
   saveCart();
 }
 
-function goToLogin() {
-  window.location.href = "login.html";
+function checkout() {
+  if (!getUser()) {
+    alert("Please login first!");
+    window.location.href = "login.html";
+    return;
+  }
+
+  const total = document.getElementById("final-total").innerText;
+
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  alert("Order placed successfully! Total: ₹" + total);
+  clearCart();
 }
 
+updateAuthUI();
 renderCart();
