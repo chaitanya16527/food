@@ -1,69 +1,64 @@
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
-    background-color: #f5f5f5;
+    font-family: Arial;
+    background: #f2f2f2;
 }
 
-/* Header */
-header {
-    background-color: #ff4d4d;
+/* NAVBAR */
+.navbar {
+    background: #131921;
     color: white;
     padding: 15px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-/* Main container */
-.container {
-    padding: 20px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Food cards */
-.card {
-    background: white;
-    width: 200px;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    text-align: center;
+.navbar input {
+    width: 40%;
+    padding: 8px;
 }
 
-/* Button */
-button {
-    background-color: #ff4d4d;
-    color: white;
+.navbar button {
+    background: orange;
     border: none;
-    padding: 8px 12px;
-    margin-top: 10px;
-    border-radius: 5px;
+    padding: 8px;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #e60000;
+/* PRODUCTS */
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 20px;
 }
 
-/* Cart section */
+.product {
+    background: white;
+    padding: 15px;
+    width: 200px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.product button {
+    background: #ff9900;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* CART */
 .cart {
     background: white;
-    width: 100%;
+    margin: 20px;
     padding: 15px;
-    border-radius: 12px;
-    margin-top: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-/* Cart list */
-#cart-list {
-    list-style: none;
-    padding: 0;
+    border-radius: 10px;
 }
 
 #cart-list li {
-    padding: 5px 0;
+    padding: 5px;
     border-bottom: 1px solid #ddd;
 }
