@@ -1,38 +1,42 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Login</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - MyShop Pro</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body class="login-page">
 
-<div class="login-box">
-  <h2>Login</h2>
+  <div class="login-box">
+    <h1>🛒 MyShop Pro</h1>
+    <h2>Login</h2>
 
-  <input type="text" id="user" placeholder="Username">
-  <input type="password" id="pass" placeholder="Password">
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
 
-  <button onclick="login()">Login</button>
+    <button onclick="loginUser()">Login</button>
 
-  <p>Use: admin / 1234</p>
-</div>
+    <p class="hint">Username: <b>admin</b></p>
+    <p class="hint">Password: <b>1234</b></p>
 
-<script>
-function login() {
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
+    <a href="index.html">Back to Home</a>
+  </div>
 
-  if (u === "admin" && p === "1234") {
-    localStorage.setItem("user", u);
-    alert("Login success");
-    window.location.href = "index.html";
-  } else {
-    alert("Wrong login");
-  }
-}
-</script>
+  <script>
+    function loginUser() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username === "admin" && password === "1234") {
+        localStorage.setItem("user", username);
+        alert("Login successful!");
+        window.location.href = "index.html";
+      } else {
+        alert("Invalid username or password");
+      }
+    }
+  </script>
 
 </body>
 </html>
