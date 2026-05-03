@@ -43,11 +43,18 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+.product img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* BUTTON */
 .product button {
     background: #ff9900;
     border: none;
     padding: 8px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 /* CART */
@@ -59,6 +66,13 @@ body {
 }
 
 #cart-list li {
-    padding: 5px;
+    padding: 8px;
     border-bottom: 1px solid #ddd;
+}
+
+#cart-list button {
+    margin-left: 10px;
+    color: red;
+    border: none;
+    cursor: pointer;
 }
