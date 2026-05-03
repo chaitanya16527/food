@@ -10,15 +10,10 @@
 
 <header class="navbar">
   <div class="logo" id="logo">🛒 MyShop Pro</div>
-
   <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProduct()">
-
   <button onclick="applyCoupon()">Coupon</button>
   <button id="authBtn" onclick="handleAuth()">Login</button>
-
-  <div class="nav-total">
-    Total: ₹<span id="nav-total">0</span>
-  </div>
+  <div class="nav-total">Total: ₹<span id="nav-total">0</span></div>
 </header>
 
 <section class="hero">
@@ -27,7 +22,6 @@
 </section>
 
 <main class="products">
-
   <div class="product">
     <img src="https://cdn-icons-png.flaticon.com/512/545/545245.png" alt="Phone">
     <h3>Phone</h3>
@@ -69,13 +63,11 @@
     <p>₹1200</p>
     <button onclick="addToCart('Backpack',1200)">Add</button>
   </div>
-
 </main>
 
 <section class="cart">
   <h2>🛒 Your Cart</h2>
   <p id="login-warning">Login required to add items to cart.</p>
-
   <ul id="cart-list"></ul>
 
   <div class="bill">
