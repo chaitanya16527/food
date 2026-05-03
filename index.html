@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MyShop Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyShop Pro</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -18,7 +18,7 @@
     <button onclick="applyCoupon()">Coupon</button>
 
     <div class="cart-box">
-        Cart Total: ₹<span id="total-price">0</span>
+        Total: ₹<span id="total-price">0</span>
     </div>
 </div>
 
@@ -26,24 +26,28 @@
 <div class="products">
 
     <div class="product">
+        <img src="https://source.unsplash.com/200x150/?phone">
         <h3>Phone</h3>
         <p>₹15000</p>
         <button onclick="addToCart('Phone',15000)">Add</button>
     </div>
 
     <div class="product">
+        <img src="https://source.unsplash.com/200x150/?laptop">
         <h3>Laptop</h3>
         <p>₹55000</p>
         <button onclick="addToCart('Laptop',55000)">Add</button>
     </div>
 
     <div class="product">
+        <img src="https://source.unsplash.com/200x150/?headphones">
         <h3>Headphones</h3>
         <p>₹2000</p>
         <button onclick="addToCart('Headphones',2000)">Add</button>
     </div>
 
     <div class="product">
+        <img src="https://source.unsplash.com/200x150/?watch">
         <h3>Watch</h3>
         <p>₹3000</p>
         <button onclick="addToCart('Watch',3000)">Add</button>
@@ -55,6 +59,7 @@
 <div class="cart">
     <h2>Your Cart</h2>
     <ul id="cart-list"></ul>
+    <h3>Total: ₹<span id="total-final">0</span></h3>
 </div>
 
 <script src="script.js"></script>
