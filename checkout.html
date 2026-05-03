@@ -1,1 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - MyShop Pro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="checkout-page">
 
+  <div class="checkout-box">
+    <h1>🛒 Checkout</h1>
+
+    <h2>Order Summary</h2>
+    <ul id="checkout-list"></ul>
+
+    <h3>Total: ₹<span id="checkout-total">0</span></h3>
+
+    <h2>Customer Details</h2>
+
+    <input type="text" id="customerName" placeholder="Full Name">
+    <input type="text" id="customerPhone" placeholder="Phone Number">
+    <textarea id="customerAddress" placeholder="Delivery Address"></textarea>
+
+    <button onclick="placeOrder()">Place Order</button>
+    <a href="index.html">Back to Home</a>
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let discountAmount = Number(localStorage.getItem("discountAmount")) || 0;
+
+    function loadCheckout() {
+      const list = document.getElementById("checkout-list");
+      let subtotal = 0;
+
+      list.innerHTML = "";
+
+      cart.forEach(item => {
+        subtotal += item.price * item.qty;
+
+        let li = document.createElement("li");
+        li.innerText = item.name + " - ₹" + item.price + " x " + item.qty;
+        list.appendChild(li);
+      });
+
+      let finalTotal = subtotal - discountAmount;
+      document.getElementById("checkout-total").innerText = finalTotal;
+    }
+
+    function placeOrder() {
+      const name = document.getElementById("customerName").value;
+      const phone = document.getElementById("customerPhone").value;
+      const address = document.getElementById("customerAddress").value;
+
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        window.location.href = "index.html";
+        return;
+      }
+
+      if (name === "" || phone === "" || address === "") {
+        alert("Please fill all details");
+        return;
+      }
+
+      alert("Order placed successfully! Thank you, " + name);
+
+      localStorage.removeItem("cart");
+      localStorage.removeItem("discountAmount");
+
+      window.location.href = "index.html";
+    }
+
+    loadCheckout();
+  </script>
+
+</body>
+</html>
