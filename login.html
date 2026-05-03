@@ -8,35 +8,35 @@
 </head>
 <body class="login-page">
 
-  <div class="login-box">
-    <h1>🛒 MyShop Pro</h1>
-    <h2>Login</h2>
+<div class="login-box">
+  <h1>🛒 MyShop Pro</h1>
+  <h2>Login</h2>
 
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
 
-    <button onclick="loginUser()">Login</button>
+  <button onclick="loginUser()">Login</button>
 
-    <p class="hint">Username: <b>admin</b></p>
-    <p class="hint">Password: <b>1234</b></p>
+  <p class="hint">Username: <b>admin</b></p>
+  <p class="hint">Password: <b>1234</b></p>
 
-    <a href="index.html">Back to Home</a>
-  </div>
+  <a href="index.html">Back to Home</a>
+</div>
 
-  <script>
-    function loginUser() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+<script>
+function loginUser() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
 
-      if (username === "admin" && password === "1234") {
-        localStorage.setItem("user", username);
-        alert("Login successful!");
-        window.location.href = "index.html";
-      } else {
-        alert("Invalid username or password");
-      }
-    }
-  </script>
+  if (username === "admin" && password === "1234") {
+    localStorage.setItem("user", username);
+    alert("Login successful!");
+    window.location.href = "index.html";
+  } else {
+    alert("Invalid username or password");
+  }
+}
+</script>
 
 </body>
 </html>
