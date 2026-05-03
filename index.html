@@ -1,69 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyShop - Mini Amazon Clone</title>
-
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>MyShop Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <h2>🛒 MyShop</h2>
+    <h2>🛒 MyShop Pro</h2>
 
-    <input 
-        type="text" 
-        placeholder="Search products..." 
-        onkeyup="searchProduct(this.value)"
-    >
+    <input type="text" placeholder="Search products..." onkeyup="searchProduct(this.value)">
 
-    <button onclick="applyCoupon()">Apply Coupon</button>
+    <button onclick="applyCoupon()">Coupon</button>
 
     <div class="cart-box">
         Cart Total: ₹<span id="total-price">0</span>
     </div>
 </div>
 
-<!-- PRODUCTS SECTION -->
+<!-- PRODUCTS -->
 <div class="products">
 
     <div class="product">
         <h3>Phone</h3>
         <p>₹15000</p>
-        <button onclick="addToCart('Phone',15000)">Add to Cart</button>
+        <button onclick="addToCart('Phone',15000)">Add</button>
     </div>
 
     <div class="product">
         <h3>Laptop</h3>
         <p>₹55000</p>
-        <button onclick="addToCart('Laptop',55000)">Add to Cart</button>
+        <button onclick="addToCart('Laptop',55000)">Add</button>
     </div>
 
     <div class="product">
         <h3>Headphones</h3>
         <p>₹2000</p>
-        <button onclick="addToCart('Headphones',2000)">Add to Cart</button>
+        <button onclick="addToCart('Headphones',2000)">Add</button>
     </div>
 
     <div class="product">
         <h3>Watch</h3>
         <p>₹3000</p>
-        <button onclick="addToCart('Watch',3000)">Add to Cart</button>
+        <button onclick="addToCart('Watch',3000)">Add</button>
     </div>
 
 </div>
 
-<!-- CART SECTION -->
+<!-- CART -->
 <div class="cart">
     <h2>Your Cart</h2>
-
     <ul id="cart-list"></ul>
-
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
