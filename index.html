@@ -2,97 +2,50 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyShop Pro</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="checkout-page">
+<body>
 
-<div class="checkout-box">
-  <h1>⚙ Admin Panel</h1>
+<header class="navbar">
+  <div class="logo" id="logo">🛒 MyShop Pro</div>
 
-  <h3>Add Product</h3>
+  <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProduct()">
 
-  <input type="text" id="pname" placeholder="Product Name">
-  <input type="number" id="pprice" placeholder="Price">
-  <input type="text" id="pimage" placeholder="Image URL">
+  <button onclick="applyCoupon()">Coupon</button>
+  <button onclick="window.location.href='orders.html'">Orders</button>
+  <button onclick="window.location.href='admin.html'">Admin</button>
+  <button id="authBtn" onclick="handleAuth()">Login</button>
 
-  <button onclick="addProduct()">Add Product</button>
+  <div class="nav-total">Total: ₹<span id="nav-total">0</span></div>
+</header>
 
-  <h3 style="margin-top:20px;">All Products</h3>
+<section class="hero">
+  <h1>Best Deals Today</h1>
+  <p>Shop smart. Save more.</p>
+</section>
 
-  <div id="product-list"></div>
+<!-- 🔥 Dynamic Products -->
+<main class="products" id="products-container"></main>
 
-  <a href="index.html">Back to Home</a>
-</div>
+<section class="cart">
+  <h2>🛒 Your Cart</h2>
+  <p id="login-warning">Login required to add items to cart.</p>
 
-<script>
+  <ul id="cart-list"></ul>
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
+  <div class="bill">
+    <p>Subtotal: ₹<span id="subtotal">0</span></p>
+    <p>Discount: ₹<span id="discount">0</span></p>
+    <h3>Total: ₹<span id="final-total">0</span></h3>
+  </div>
 
-function loadProducts() {
-  let container = document.getElementById("product-list");
+  <button class="checkout-btn" onclick="checkout()">Checkout</button>
+  <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+</section>
 
-  if (products.length === 0) {
-    container.innerHTML = "<p>No products added</p>";
-    return;
-  }
-
-  container.innerHTML = "";
-
-  products.forEach((p, index) => {
-    let div = document.createElement("div");
-
-    div.style.borderBottom = "1px solid #ccc";
-    div.style.padding = "10px";
-
-    div.innerHTML = `
-      <p><b>${p.name}</b> - ₹${p.price}</p>
-      <button onclick="deleteProduct(${index})" style="background:red;color:white;">
-        Delete
-      </button>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-function addProduct() {
-  let name = document.getElementById("pname").value;
-  let price = document.getElementById("pprice").value;
-  let image = document.getElementById("pimage").value;
-
-  if (name === "" || price === "") {
-    alert("Fill all fields");
-    return;
-  }
-
-  products.push({
-    name: name,
-    price: Number(price),
-    image: image || "https://via.placeholder.com/100"
-  });
-
-  localStorage.setItem("products", JSON.stringify(products));
-
-  alert("Product added!");
-
-  document.getElementById("pname").value = "";
-  document.getElementById("pprice").value = "";
-  document.getElementById("pimage").value = "";
-
-  loadProducts();
-}
-
-function deleteProduct(index) {
-  products.splice(index, 1);
-  localStorage.setItem("products", JSON.stringify(products));
-  loadProducts();
-}
-
-loadProducts();
-
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
