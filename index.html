@@ -1,92 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyShop Pro</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-<header class="navbar">
-  <div class="logo" id="logo">🛒 MyShop Pro</div>
+<body class="checkout-page">
 
-  <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProduct()">
+<div class="checkout-box">
+  <h1>⚙ Admin Panel</h1>
 
-  <button onclick="applyCoupon()">Coupon</button>
-  <button onclick="window.location.href='orders.html'">Orders</button>
-  <button id="authBtn" onclick="handleAuth()">Login</button>
+  <h3>Add Product</h3>
 
-  <div class="nav-total">Total: ₹<span id="nav-total">0</span></div>
-</header>
+  <input type="text" id="pname" placeholder="Product Name">
+  <input type="number" id="pprice" placeholder="Price">
+  <input type="text" id="pimage" placeholder="Image URL">
 
-<section class="hero">
-  <h1>Best Deals Today</h1>
-  <p>Shop smart. Save more.</p>
-</section>
+  <button onclick="addProduct()">Add Product</button>
 
-<main class="products">
+  <h3 style="margin-top:20px;">All Products</h3>
 
-  <div class="product">
-    <img src="https://cdn-icons-png.flaticon.com/512/545/545245.png" alt="Phone">
-    <h3>Phone</h3>
-    <p>₹15000</p>
-    <button onclick="addToCart('Phone',15000)">Add</button>
-  </div>
+  <div id="product-list"></div>
 
-  <div class="product">
-    <img src="https://cdn-icons-png.flaticon.com/512/3474/3474360.png" alt="Laptop">
-    <h3>Laptop</h3>
-    <p>₹55000</p>
-    <button onclick="addToCart('Laptop',55000)">Add</button>
-  </div>
+  <a href="index.html">Back to Home</a>
+</div>
 
-  <div class="product">
-    <img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png" alt="Headphones">
-    <h3>Headphones</h3>
-    <p>₹2000</p>
-    <button onclick="addToCart('Headphones',2000)">Add</button>
-  </div>
+<script>
 
-  <div class="product">
-    <img src="https://cdn-icons-png.flaticon.com/512/2972/2972531.png" alt="Watch">
-    <h3>Watch</h3>
-    <p>₹3000</p>
-    <button onclick="addToCart('Watch',3000)">Add</button>
-  </div>
+let products = JSON.parse(localStorage.getItem("products")) || [];
 
-  <div class="product">
-    <img src="https://cdn-icons-png.flaticon.com/512/3081/3081648.png" alt="Shoes">
-    <h3>Shoes</h3>
-    <p>₹2500</p>
-    <button onclick="addToCart('Shoes',2500)">Add</button>
-  </div>
+function loadProducts() {
+  let container = document.getElementById("product-list");
 
-  <div class="product">
-    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331970.png" alt="Backpack">
-    <h3>Backpack</h3>
-    <p>₹1200</p>
-    <button onclick="addToCart('Backpack',1200)">Add</button>
-  </div>
+  if (products.length === 0) {
+    container.innerHTML = "<p>No products added</p>";
+    return;
+  }
 
-</main>
+  container.innerHTML = "";
 
-<section class="cart">
-  <h2>🛒 Your Cart</h2>
-  <p id="login-warning">Login required to add items to cart.</p>
+  products.forEach((p, index) => {
+    let div = document.createElement("div");
 
-  <ul id="cart-list"></ul>
+    div.style.borderBottom = "1px solid #ccc";
+    div.style.padding = "10px";
 
-  <div class="bill">
-    <p>Subtotal: ₹<span id="subtotal">0</span></p>
-    <p>Discount: ₹<span id="discount">0</span></p>
-    <h3>Total: ₹<span id="final-total">0</span></h3>
-  </div>
+    div.innerHTML = `
+      <p><b>${p.name}</b> - ₹${p.price}</p>
+      <button onclick="deleteProduct(${index})" style="background:red;color:white;">
+        Delete
+      </button>
+    `;
 
-  <button class="checkout-btn" onclick="checkout()">Checkout</button>
-  <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
-</section>
+    container.appendChild(div);
+  });
+}
 
-<script src="script.js"></script>
+function addProduct() {
+  let name = document.getElementById("pname").value;
+  let price = document.getElementById("pprice").value;
+  let image = document.getElementById("pimage").value;
+
+  if (name === "" || price === "") {
+    alert("Fill all fields");
+    return;
+  }
+
+  products.push({
+    name: name,
+    price: Number(price),
+    image: image || "https://via.placeholder.com/100"
+  });
+
+  localStorage.setItem("products", JSON.stringify(products));
+
+  alert("Product added!");
+
+  document.getElementById("pname").value = "";
+  document.getElementById("pprice").value = "";
+  document.getElementById("pimage").value = "";
+
+  loadProducts();
+}
+
+function deleteProduct(index) {
+  products.splice(index, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadProducts();
+}
+
+loadProducts();
+
+</script>
+
 </body>
 </html>
