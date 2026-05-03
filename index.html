@@ -3,50 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Delivery App</title>
+    <title>MyShop - Mini Amazon Clone</title>
 
-    <!-- CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-    🍔 Food Delivery App
-</header>
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>🛒 MyShop</h2>
 
-<div class="container">
+    <input 
+        type="text" 
+        placeholder="Search products..." 
+        onkeyup="searchProduct(this.value)"
+    >
 
-    <!-- Food Items -->
-    <div class="card">
-        <h3>Pizza</h3>
-        <p>₹199</p>
-        <button onclick="addToCart('Pizza',199)">Add to Cart</button>
+    <button onclick="applyCoupon()">Apply Coupon</button>
+
+    <div class="cart-box">
+        Cart Total: ₹<span id="total-price">0</span>
+    </div>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<div class="products">
+
+    <div class="product">
+        <h3>Phone</h3>
+        <p>₹15000</p>
+        <button onclick="addToCart('Phone',15000)">Add to Cart</button>
     </div>
 
-    <div class="card">
-        <h3>Burger</h3>
-        <p>₹99</p>
-        <button onclick="addToCart('Burger',99)">Add to Cart</button>
+    <div class="product">
+        <h3>Laptop</h3>
+        <p>₹55000</p>
+        <button onclick="addToCart('Laptop',55000)">Add to Cart</button>
     </div>
 
-    <div class="card">
-        <h3>Biryani</h3>
-        <p>₹149</p>
-        <button onclick="addToCart('Biryani',149)">Add to Cart</button>
+    <div class="product">
+        <h3>Headphones</h3>
+        <p>₹2000</p>
+        <button onclick="addToCart('Headphones',2000)">Add to Cart</button>
     </div>
 
-    <!-- Cart Section -->
-    <div class="cart">
-        <h2>🛒 Cart</h2>
-
-        <ul id="cart-list"></ul>
-
-        <h3>Total: ₹<span id="total">0</span></h3>
+    <div class="product">
+        <h3>Watch</h3>
+        <p>₹3000</p>
+        <button onclick="addToCart('Watch',3000)">Add to Cart</button>
     </div>
 
 </div>
 
-<!-- JS file -->
+<!-- CART SECTION -->
+<div class="cart">
+    <h2>Your Cart</h2>
+
+    <ul id="cart-list"></ul>
+
+</div>
+
 <script src="script.js"></script>
 
 </body>
