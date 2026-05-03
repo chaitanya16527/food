@@ -1,1 +1,117 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - MyShop Pro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="checkout-page">
+
+<div class="checkout-box">
+  <h1>💳 Payment</h1>
+
+  <h2>Total Payable: ₹<span id="payment-total">0</span></h2>
+
+  <h3>Select Payment Method</h3>
+
+  <label>
+    <input type="radio" name="payment" value="UPI" checked>
+    UPI
+  </label><br><br>
+
+  <label>
+    <input type="radio" name="payment" value="Card">
+    Debit / Credit Card
+  </label><br><br>
+
+  <label>
+    <input type="radio" name="payment" value="COD">
+    Cash on Delivery
+  </label>
+
+  <div id="payment-details">
+    <input type="text" id="upiId" placeholder="Enter UPI ID">
+  </div>
+
+  <button onclick="payNow()">Pay Now</button>
+  <a href="checkout.html">Back to Checkout</a>
+</div>
+
+<script>
+let pendingOrder = JSON.parse(localStorage.getItem("pendingOrder"));
+
+if (!pendingOrder) {
+  alert("No order found!");
+  window.location.href = "index.html";
+}
+
+document.getElementById("payment-total").innerText = pendingOrder.total;
+
+const paymentRadios = document.querySelectorAll("input[name='payment']");
+const paymentDetails = document.getElementById("payment-details");
+
+paymentRadios.forEach(radio => {
+  radio.addEventListener("change", function () {
+    if (this.value === "UPI") {
+      paymentDetails.innerHTML = `<input type="text" id="upiId" placeholder="Enter UPI ID">`;
+    } else if (this.value === "Card") {
+      paymentDetails.innerHTML = `
+        <input type="text" id="cardNumber" placeholder="Card Number">
+        <input type="text" id="cardName" placeholder="Card Holder Name">
+        <input type="text" id="expiry" placeholder="Expiry MM/YY">
+        <input type="password" id="cvv" placeholder="CVV">
+      `;
+    } else {
+      paymentDetails.innerHTML = `<p>Pay when your order is delivered.</p>`;
+    }
+  });
+});
+
+function payNow() {
+  const selectedPayment = document.querySelector("input[name='payment']:checked").value;
+
+  if (selectedPayment === "UPI") {
+    const upi = document.getElementById("upiId").value.trim();
+    if (upi === "") {
+      alert("Please enter UPI ID");
+      return;
+    }
+  }
+
+  if (selectedPayment === "Card") {
+    const cardNumber = document.getElementById("cardNumber").value.trim();
+    const cardName = document.getElementById("cardName").value.trim();
+    const expiry = document.getElementById("expiry").value.trim();
+    const cvv = document.getElementById("cvv").value.trim();
+
+    if (cardNumber === "" || cardName === "" || expiry === "" || cvv === "") {
+      alert("Please fill all card details");
+      return;
+    }
+  }
+
+  pendingOrder.paymentMethod = selectedPayment;
+  pendingOrder.status = selectedPayment === "COD" ? "Pending Payment" : "Paid";
+
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  orders.push(pendingOrder);
+
+  localStorage.setItem("orders", JSON.stringify(orders));
+
+  localStorage.setItem("lastOrderId", pendingOrder.id);
+  localStorage.setItem("lastOrderName", pendingOrder.name);
+  localStorage.setItem("lastOrderTotal", pendingOrder.total);
+  localStorage.setItem("lastPaymentMethod", selectedPayment);
+
+  localStorage.removeItem("cart");
+  localStorage.removeItem("discountAmount");
+  localStorage.removeItem("pendingOrder");
+
+  window.location.href = "success.html";
+}
+</script>
+
+</body>
+</html>
