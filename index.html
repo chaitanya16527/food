@@ -1,95 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyShop Pro</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyShop Pro</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <header class="navbar">
-    <div class="logo">🛒 MyShop Pro</div>
+<header class="navbar">
+  <div class="logo">🛒 MyShop Pro</div>
 
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search products..."
-      onkeyup="searchProduct()"
-    />
+  <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProduct()">
 
-    <button class="coupon-btn" onclick="applyCoupon()">Coupon</button>
+  <button onclick="applyCoupon()">Coupon</button>
+  <button onclick="goToLogin()">Login</button>
 
-    <div class="nav-total">
-      Total: ₹<span id="nav-total">0</span>
-    </div>
-  </header>
+  <div class="nav-total">
+    Total: ₹<span id="nav-total">0</span>
+  </div>
+</header>
 
-  <section class="hero">
-    <h1>Best Deals Today</h1>
-    <p>Shop smart. Save more.</p>
-  </section>
+<section class="hero">
+  <h1>Best Deals Today</h1>
+  <p>Shop smart. Save more.</p>
+</section>
 
-  <main class="products" id="products">
+<main class="products">
 
-    <div class="product">
-      <img src="https://cdn-icons-png.flaticon.com/512/545/545245.png" alt="Phone">
-      <h3>Phone</h3>
-      <p class="price">₹15000</p>
-      <button onclick="addToCart('Phone', 15000)">Add to Cart</button>
-    </div>
+  <div class="product">
+    <img src="https://cdn-icons-png.flaticon.com/512/545/545245.png">
+    <h3>Phone</h3>
+    <p>₹15000</p>
+    <button onclick="addToCart('Phone',15000)">Add</button>
+  </div>
 
-    <div class="product">
-      <img src="https://cdn-icons-png.flaticon.com/512/3474/3474360.png" alt="Laptop">
-      <h3>Laptop</h3>
-      <p class="price">₹55000</p>
-      <button onclick="addToCart('Laptop', 55000)">Add to Cart</button>
-    </div>
+  <div class="product">
+    <img src="https://cdn-icons-png.flaticon.com/512/3474/3474360.png">
+    <h3>Laptop</h3>
+    <p>₹55000</p>
+    <button onclick="addToCart('Laptop',55000)">Add</button>
+  </div>
 
-    <div class="product">
-      <img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png" alt="Headphones">
-      <h3>Headphones</h3>
-      <p class="price">₹2000</p>
-      <button onclick="addToCart('Headphones', 2000)">Add to Cart</button>
-    </div>
+  <div class="product">
+    <img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png">
+    <h3>Headphones</h3>
+    <p>₹2000</p>
+    <button onclick="addToCart('Headphones',2000)">Add</button>
+  </div>
 
-    <div class="product">
-      <img src="https://cdn-icons-png.flaticon.com/512/2972/2972531.png" alt="Watch">
-      <h3>Watch</h3>
-      <p class="price">₹3000</p>
-      <button onclick="addToCart('Watch', 3000)">Add to Cart</button>
-    </div>
+</main>
 
-    <div class="product">
-      <img src="https://cdn-icons-png.flaticon.com/512/3081/3081648.png" alt="Shoes">
-      <h3>Shoes</h3>
-      <p class="price">₹2500</p>
-      <button onclick="addToCart('Shoes', 2500)">Add to Cart</button>
-    </div>
+<section class="cart">
+  <h2>🛒 Your Cart</h2>
+  <ul id="cart-list"></ul>
 
-    <div class="product">
-      <img src="https://cdn-icons-png.flaticon.com/512/2331/2331970.png" alt="Backpack">
-      <h3>Backpack</h3>
-      <p class="price">₹1200</p>
-      <button onclick="addToCart('Backpack', 1200)">Add to Cart</button>
-    </div>
+  <p>Subtotal: ₹<span id="subtotal">0</span></p>
+  <p>Discount: ₹<span id="discount">0</span></p>
+  <h3>Total: ₹<span id="final-total">0</span></h3>
 
-  </main>
+  <button onclick="checkout()">Checkout</button>
+  <button onclick="clearCart()">Clear</button>
+</section>
 
-  <section class="cart">
-    <h2>🛒 Your Cart</h2>
-    <ul id="cart-list"></ul>
-
-    <div class="bill">
-      <p>Subtotal: ₹<span id="subtotal">0</span></p>
-      <p>Discount: ₹<span id="discount">0</span></p>
-      <h3>Total: ₹<span id="final-total">0</span></h3>
-    </div>
-
-    <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
-    <button class="checkout-btn" onclick="checkout()">Checkout</button>
-  </section>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
