@@ -1,6 +1,71 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let discountAmount = Number(localStorage.getItem("discountAmount")) || 0;
 
+let defaultProducts = [
+  {
+    name: "Phone",
+    price: 15000,
+    image: "https://cdn-icons-png.flaticon.com/512/545/545245.png"
+  },
+  {
+    name: "Laptop",
+    price: 55000,
+    image: "https://cdn-icons-png.flaticon.com/512/3474/3474360.png"
+  },
+  {
+    name: "Headphones",
+    price: 2000,
+    image: "https://cdn-icons-png.flaticon.com/512/1048/1048953.png"
+  },
+  {
+    name: "Watch",
+    price: 3000,
+    image: "https://cdn-icons-png.flaticon.com/512/2972/2972531.png"
+  },
+  {
+    name: "Shoes",
+    price: 2500,
+    image: "https://cdn-icons-png.flaticon.com/512/3081/3081648.png"
+  },
+  {
+    name: "Backpack",
+    price: 1200,
+    image: "https://cdn-icons-png.flaticon.com/512/2331/2331970.png"
+  }
+];
+
+function getProducts() {
+  let products = JSON.parse(localStorage.getItem("products"));
+
+  if (!products || products.length === 0) {
+    localStorage.setItem("products", JSON.stringify(defaultProducts));
+    return defaultProducts;
+  }
+
+  return products;
+}
+
+function loadDynamicProducts() {
+  const container = document.getElementById("products-container");
+  const products = getProducts();
+
+  container.innerHTML = "";
+
+  products.forEach(product => {
+    let div = document.createElement("div");
+    div.className = "product";
+
+    div.innerHTML = `
+      <img src="${product.image}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p>₹${product.price}</p>
+      <button onclick="addToCart('${product.name}', ${product.price})">Add</button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
 function getUser() {
   return localStorage.getItem("user");
 }
@@ -179,5 +244,6 @@ function checkout() {
   window.location.href = "checkout.html";
 }
 
+loadDynamicProducts();
 updateAuthUI();
 renderCart();
