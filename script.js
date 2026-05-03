@@ -1,72 +1,132 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let discountAmount = 0;
 
 function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
 }
 
 function addToCart(name, price) {
-    let item = cart.find(p => p.name === name);
+  const item = cart.find(product => product.name === name);
 
-    if (item) {
-        item.qty++;
-    } else {
-        cart.push({ name, price, qty: 1 });
-    }
+  if (item) {
+    item.qty++;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
 
-    saveCart();
+  saveCart();
+}
+
+function increaseQty(name) {
+  const item = cart.find(product => product.name === name);
+  if (item) {
+    item.qty++;
+  }
+  saveCart();
+}
+
+function decreaseQty(name) {
+  const item = cart.find(product => product.name === name);
+
+  if (item && item.qty > 1) {
+    item.qty--;
+  } else {
+    cart = cart.filter(product => product.name !== name);
+  }
+
+  saveCart();
 }
 
 function removeItem(name) {
-    cart = cart.filter(item => item.name !== name);
-    saveCart();
+  cart = cart.filter(product => product.name !== name);
+  saveCart();
 }
 
 function renderCart() {
-    let list = document.getElementById("cart-list");
-    list.innerHTML = "";
+  const cartList = document.getElementById("cart-list");
+  cartList.innerHTML = "";
 
-    let total = 0;
+  let subtotal = 0;
 
-    cart.forEach(item => {
-        let li = document.createElement("li");
+  cart.forEach(item => {
+    subtotal += item.price * item.qty;
 
-        li.innerHTML = `
-            ${item.name} - ₹${item.price} x ${item.qty}
-            <button onclick="removeItem('${item.name}')">X</button>
-        `;
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${item.name} - ₹${item.price} x ${item.qty}</span>
+      <div class="cart-actions">
+        <button class="plus" onclick="increaseQty('${item.name}')">+</button>
+        <button class="minus" onclick="decreaseQty('${item.name}')">-</button>
+        <button class="remove" onclick="removeItem('${item.name}')">Remove</button>
+      </div>
+    `;
 
-        list.appendChild(li);
+    cartList.appendChild(li);
+  });
 
-        total += item.price * item.qty;
-    });
+  if (subtotal === 0) {
+    discountAmount = 0;
+  }
 
-    document.getElementById("total-price").innerText = total;
-    document.getElementById("total-final").innerText = total;
+  const finalTotal = subtotal - discountAmount;
+
+  document.getElementById("subtotal").innerText = subtotal;
+  document.getElementById("discount").innerText = discountAmount;
+  document.getElementById("final-total").innerText = finalTotal;
+  document.getElementById("nav-total").innerText = finalTotal;
 }
 
-function searchProduct(query) {
-    let products = document.querySelectorAll(".product");
+function searchProduct() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  const products = document.querySelectorAll(".product");
 
-    products.forEach(p => {
-        let name = p.querySelector("h3").innerText.toLowerCase();
+  products.forEach(product => {
+    const name = product.querySelector("h3").innerText.toLowerCase();
 
-        p.style.display = name.includes(query.toLowerCase()) ? "block" : "none";
-    });
+    if (name.includes(query)) {
+      product.style.display = "block";
+    } else {
+      product.style.display = "none";
+    }
+  });
 }
 
 function applyCoupon() {
-    let code = prompt("Enter coupon code:");
+  const subtotal = Number(document.getElementById("subtotal").innerText);
 
-    if (code === "SAVE10") {
-        let total = parseInt(document.getElementById("total-final").innerText);
-        total = total - (total * 0.1);
-        document.getElementById("total-final").innerText = total;
-        document.getElementById("total-price").innerText = total;
-        alert("10% discount applied!");
-    } else {
-        alert("Invalid coupon");
-    }
+  if (subtotal === 0) {
+    alert("Add items first!");
+    return;
+  }
+
+  const code = prompt("Enter coupon code: SAVE10");
+
+  if (code === "SAVE10") {
+    discountAmount = Math.floor(subtotal * 0.10);
+    renderCart();
+    alert("Coupon applied: 10% discount");
+  } else {
+    alert("Invalid coupon");
+  }
+}
+
+function clearCart() {
+  cart = [];
+  discountAmount = 0;
+  saveCart();
+}
+
+function checkout() {
+  const total = document.getElementById("final-total").innerText;
+
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  alert("Order placed successfully! Total: ₹" + total);
+  clearCart();
 }
 
 renderCart();
