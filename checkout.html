@@ -61,10 +61,25 @@ function placeOrder() {
   }
 
   const orderId = "ORD" + Math.floor(Math.random() * 1000000);
+  const total = document.getElementById("checkout-total").innerText;
+
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+  orders.push({
+    id: orderId,
+    name: name,
+    phone: phone,
+    address: address,
+    total: total,
+    items: checkoutCart,
+    date: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("orders", JSON.stringify(orders));
 
   localStorage.setItem("lastOrderId", orderId);
   localStorage.setItem("lastOrderName", name);
-  localStorage.setItem("lastOrderTotal", document.getElementById("checkout-total").innerText);
+  localStorage.setItem("lastOrderTotal", total);
 
   localStorage.removeItem("cart");
   localStorage.removeItem("discountAmount");
