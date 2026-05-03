@@ -21,7 +21,7 @@
   <input type="text" id="customerPhone" placeholder="Phone Number">
   <textarea id="customerAddress" placeholder="Delivery Address"></textarea>
 
-  <button onclick="placeOrder()">Place Order</button>
+  <button onclick="goToPayment()">Continue to Payment</button>
   <a href="index.html">Back to Home</a>
 </div>
 
@@ -44,7 +44,7 @@ function loadCheckout() {
   document.getElementById("checkout-total").innerText = subtotal - checkoutDiscount;
 }
 
-function placeOrder() {
+function goToPayment() {
   const name = document.getElementById("customerName").value.trim();
   const phone = document.getElementById("customerPhone").value.trim();
   const address = document.getElementById("customerAddress").value.trim();
@@ -63,28 +63,20 @@ function placeOrder() {
   const orderId = "ORD" + Math.floor(Math.random() * 1000000);
   const total = document.getElementById("checkout-total").innerText;
 
-  let orders = JSON.parse(localStorage.getItem("orders")) || [];
-
-  orders.push({
+  const pendingOrder = {
     id: orderId,
     name: name,
     phone: phone,
     address: address,
     total: total,
     items: checkoutCart,
-    date: new Date().toLocaleString()
-  });
+    date: new Date().toLocaleString(),
+    status: "Pending"
+  };
 
-  localStorage.setItem("orders", JSON.stringify(orders));
+  localStorage.setItem("pendingOrder", JSON.stringify(pendingOrder));
 
-  localStorage.setItem("lastOrderId", orderId);
-  localStorage.setItem("lastOrderName", name);
-  localStorage.setItem("lastOrderTotal", total);
-
-  localStorage.removeItem("cart");
-  localStorage.removeItem("discountAmount");
-
-  window.location.href = "success.html";
+  window.location.href = "payment.html";
 }
 
 loadCheckout();
