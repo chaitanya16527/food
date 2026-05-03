@@ -42,6 +42,7 @@ function renderCart() {
     });
 
     document.getElementById("total-price").innerText = total;
+    document.getElementById("total-final").innerText = total;
 }
 
 function searchProduct(query) {
@@ -58,8 +59,9 @@ function applyCoupon() {
     let code = prompt("Enter coupon code:");
 
     if (code === "SAVE10") {
-        let total = parseInt(document.getElementById("total-price").innerText);
+        let total = parseInt(document.getElementById("total-final").innerText);
         total = total - (total * 0.1);
+        document.getElementById("total-final").innerText = total;
         document.getElementById("total-price").innerText = total;
         alert("10% discount applied!");
     } else {
